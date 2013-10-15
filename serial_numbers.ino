@@ -22,7 +22,9 @@ void set_numbers(char *numbers, int len) {
   lc.clearDisplay(0);
   for(int i=0; i< len; i++) {
     int number = numbers[len - i -2]- '0';
-    lc.setDigit(0,i,number,false);
+    if (number != "x" - "0") {
+      lc.setDigit(0,i,number,false);
+    }
   }
 }
 
