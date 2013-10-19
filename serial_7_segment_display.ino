@@ -18,14 +18,21 @@ void set_numbers(String numbers) {
   int length = numbers.length();
   for(int i=0; i< length; i++) {
     char currentChar = numbers.charAt(length - i -1);
-    int number = currentChar -'0';
-    
+    int number = currentChar -'0'; 
     
     if (number != "x" - "0") {
       lc.setDigit(0,i,number,false);
     }
   }
 }
+
+void set_number(String param) {
+  int index = param.charAt(0) -'0';
+  int value = param.charAt(1);
+ 
+  lc.setChar(0,index,value,false);
+}
+
 
 void set_led(String numbers) {
   set_numbers("666\n");
@@ -38,8 +45,8 @@ void process_command(String command) {
   
   if (command.startsWith("n")) {
     set_numbers(param);
-  } else if (command.startsWith("l")) {
-    set_numbers(param);    
+  } else if (command.startsWith("d")) {
+    set_number(param);    
   }
 }
 
