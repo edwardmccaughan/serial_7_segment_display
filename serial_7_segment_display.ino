@@ -10,14 +10,14 @@ void setup() {
   
   Serial.begin(9600);
   Serial.print("Arduino is here!");
+  
 } 
 
 void set_numbers(String numbers) {
-
   lc.clearDisplay(0);
   int length = numbers.length();
   for(int i=0; i< length; i++) {
-    char currentChar = numbers.charAt(length - i -2);
+    char currentChar = numbers.charAt(length - i -1);
     int number = currentChar -'0';
     
     
@@ -27,10 +27,21 @@ void set_numbers(String numbers) {
   }
 }
 
-void process_command(String command) {
-  set_numbers(command);
+void set_led(String numbers) {
+  set_numbers("666\n");
 }
 
+void process_command(String command) {
+  
+  // strip off command char
+  String param = command.substring(1);
+  
+  if (command.startsWith("n")) {
+    set_numbers(param);
+  } else if (command.startsWith("l")) {
+    set_numbers(param);    
+  }
+}
 
 void loop() {
  while (Serial.available() > 0) {
@@ -42,7 +53,9 @@ void loop() {
             process_command(inData);
             inData = ""; // Clear recieved buffer
         } else {
-          inData += recieved;
+          if (recieved != '\r') { //just ignore \r character
+            inData += recieved;
+          }
         }
     }
 }
