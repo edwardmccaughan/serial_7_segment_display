@@ -9,24 +9,28 @@ void setup() {
   lc.clearDisplay(0);
   
   Serial.begin(9600);
-  
-  char number_string[] = "1234";
-  set_numbers(number_string, sizeof(number_string));
   Serial.print("Arduino is here!");
 } 
 
-void set_numbers(char *numbers, int len) {
-//  for(int i=0; i< 8; i++) {
-//    lc.setDigit(0,i,0,false);
-//  }
+void set_numbers(String numbers) {
+
   lc.clearDisplay(0);
-  for(int i=0; i< len; i++) {
-    int number = numbers[len - i -2]- '0';
+  int length = numbers.length();
+  for(int i=0; i< length; i++) {
+    char currentChar = numbers.charAt(length - i -2);
+    int number = currentChar -'0';
+    
+    
     if (number != "x" - "0") {
       lc.setDigit(0,i,number,false);
     }
   }
 }
+
+void process_command(String command) {
+  set_numbers(command);
+}
+
 
 void loop() {
  while (Serial.available() > 0) {
@@ -34,15 +38,11 @@ void loop() {
         
         // Process message when new line character is recieved
         if (recieved == '\n')
-        {           
-            // convert and set numbers
-            char charBuf[inData.length()];
-            inData.toCharArray(charBuf, inData.length());
-            set_numbers(charBuf, inData.length());
-            
+        {
+            process_command(inData);
             inData = ""; // Clear recieved buffer
         } else {
-          inData += recieved; 
+          inData += recieved;
         }
     }
 }
